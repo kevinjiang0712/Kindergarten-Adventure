@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Kindergarten Heroes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Fredoka:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --sky-top: #6DD5FA;
+        --sky-bottom: #FFFFFF;
+        --grass-light: #a8e063;
+        --grass-dark: #56ab2f;
+      }
+
+      body {
+        font-family: 'Fredoka', sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent scroll on body, scroll inside game container if needed */
+        background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 80%);
+        height: 100vh;
+        width: 100vw;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+
+      /* Game Background Elements */
+      .bg-hill {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 20vh;
+        background: var(--grass-dark);
+        border-top-left-radius: 100% 100%;
+        border-top-right-radius: 0;
+        z-index: 0;
+      }
+      
+      .bg-hill::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: -20%;
+        width: 120%;
+        height: 30vh;
+        background: var(--grass-light);
+        border-top-left-radius: 0;
+        border-top-right-radius: 100% 100%;
+        z-index: -1;
+      }
+
+      /* Clouds */
+      .cloud {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50px;
+        z-index: 1;
+        animation: floatCloud linear infinite;
+      }
+      .cloud::after, .cloud::before {
+        content: '';
+        position: absolute;
+        background: inherit;
+        border-radius: 50%;
+      }
+
+      /* Animations */
+      @keyframes floatCloud {
+        from { transform: translateX(100vw); }
+        to { transform: translateX(-200px); }
+      }
+
+      @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.05); }
+        70% { transform: scale(0.9); }
+        100% { transform: scale(1); opacity: 1; }
+      }
+
+      @keyframes slideUp {
+        from { transform: translateY(50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+      }
+      
+      @keyframes shine {
+        0% { left: -100%; }
+        20% { left: 100%; }
+        100% { left: 100%; }
+      }
+
+      /* --- Character Live Animations --- */
+
+      /* 1. Heavy Breathing (Dino/Big Monsters) - Slow, grounded, powerful */
+      @keyframes anim-heave {
+        0%, 100% { transform: scaleY(1) translateY(0); }
+        50% { transform: scaleY(1.03) translateY(-2px); }
+      }
+
+      /* 2. Floating (Elsa/Ghosts) - Graceful, weightless */
+      @keyframes anim-float {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(1deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+      }
+
+      /* 3. Wiggle/Bounce (Paw/Active) - Energetic, fast */
+      @keyframes anim-wiggle {
+        0%, 100% { transform: rotate(0deg) scale(1); }
+        25% { transform: rotate(-3deg) scale(1.02); }
+        50% { transform: rotate(0deg) scale(0.98) translateY(2px); }
+        75% { transform: rotate(3deg) scale(1.02); }
+      }
+
+      /* 4. Mechanical Glitch (Robot) - Still then sudden jerk */
+      @keyframes anim-glitch {
+        0%, 90% { transform: translate(0,0); filter: brightness(1); }
+        92% { transform: translate(1px, 1px); }
+        94% { transform: translate(-1px, -1px); filter: brightness(1.2); }
+        96% { transform: translate(1px, -1px); }
+        98% { transform: translate(0, 0); }
+      }
+
+      /* 5. Jelly Squash (Slime) - Elastic, soft */
+      @keyframes anim-jelly {
+        0%, 100% { transform: scale(1, 1); }
+        50% { transform: scale(1.08, 0.92) translateY(3px); }
+      }
+      
+      /* 6. Doze (Sleepy) - Very slow nodding */
+      @keyframes anim-doze {
+        0% { transform: rotate(0deg) translateY(0); }
+        50% { transform: rotate(2deg) translateY(2px); }
+        100% { transform: rotate(0deg) translateY(0); }
+      }
+
+      /* Custom Scrollbar for content */
+      .scrollable-content::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <!-- Background Decor -->
+    <div class="bg-hill"></div>
+    <div class="cloud" style="width: 120px; height: 40px; top: 10%; animation-duration: 25s;"></div>
+    <div class="cloud" style="width: 80px; height: 30px; top: 25%; animation-duration: 35s; animation-delay: -10s"></div>
+    
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
